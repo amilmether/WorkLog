@@ -14,20 +14,9 @@ const reportRoutes = require("./routes/reports");
 const app = express();
 
 // ── Middleware ──────────────────────────────────────────────
-// Allow requests from both local dev and the deployed Vercel frontend
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.CLIENT_URL, // set this in Render environment variables
-];
+// Allow ALL origins — works for local dev, Vercel, Postman, everywhere
+app.use(cors());
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (Postman, mobile apps)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error("Not allowed by CORS"));
-  },
-}));
 // express.json() lets us read JSON from req.body on POST/PUT requests
 app.use(express.json());
 
